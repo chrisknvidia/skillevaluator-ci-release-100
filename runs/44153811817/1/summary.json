@@ -1,0 +1,76 @@
+{
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "incomplete": 0,
+  "overall_passed": true,
+  "overall_status": "passed",
+  "total_validators": 26,
+  "total_errors": 0,
+  "total_warnings": 10,
+  "severity_counts": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 1
+  },
+  "skills": [
+    {
+      "path": "skills/evidence-table",
+      "report_dir": "skill-001",
+      "exit_code": 0,
+      "overall_status": "passed",
+      "incomplete_scans": [],
+      "passed": true,
+      "total_validators": 13,
+      "total_errors": 0,
+      "total_warnings": 6,
+      "severity_counts": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 1
+      }
+    },
+    {
+      "path": "skills/glossary-builder",
+      "report_dir": "skill-002",
+      "exit_code": 0,
+      "overall_status": "passed",
+      "incomplete_scans": [],
+      "passed": true,
+      "total_validators": 13,
+      "total_errors": 0,
+      "total_warnings": 4,
+      "severity_counts": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      }
+    }
+  ],
+  "selection": {
+    "mode": "all",
+    "base": null,
+    "head": null,
+    "discovered": 2,
+    "selected": [
+      "skills/evidence-table",
+      "skills/glossary-builder"
+    ],
+    "deleted": []
+  },
+  "execution": {
+    "run_url": "https://github.com/chrisknvidia/skillevaluator-ci-release-100/actions/runs/44153811817",
+    "commit": "e03278c1b8a005bfe4d0e2085d75288ec1ddea5c",
+    "image": "ghcr.io/chrisknvidia/skillevaluator-candidate-100@sha256:6d0e40257bebba9f6908bad0164bc5497d6f17e95c2df649746f64d07c456deb",
+    "report_url": "https://chrisknvidia.github.io/skillevaluator-ci-release-100/runs/44153811817/1/",
+    "llm_enabled": false,
+    "workflow_sha": "e03278c1b8a005bfe4d0e2085d75288ec1ddea5c"
+  },
+  "enforcement": {
+    "mode": "strict",
+    "downgraded": false
+  }
+}
