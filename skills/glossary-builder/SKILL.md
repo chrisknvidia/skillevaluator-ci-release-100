@@ -57,3 +57,5 @@ If text is empty or invalid, identify the input problem and request a readable e
 <!-- Candidate changed-skill selection check. -->
 
 <!-- Update existing PR bot comment using comment-only workflow. -->
+
+<!-- Advance current head before backfilling the earlier completed scan. -->
