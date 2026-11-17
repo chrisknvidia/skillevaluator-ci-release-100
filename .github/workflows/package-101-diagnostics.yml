@@ -59,4 +59,5 @@ jobs:
       - name: Plain progress output
         if: always()
         working-directory: ${{ runner.temp }}
-        run: ./skillevaluator-wheel-3.12/bin/python -c 'import io; from skillevaluator.tier3.harbor.progress import PlainProgressReporter,ProgressEvent,Tier3RunPlan; s=io.StringIO(); r=PlainProgressReporter(stream=s,refresh_interval=60); r.start(Tier3RunPlan(skill_name="wheel-smoke",environment="docker",agents=("opencode",))); r.emit(ProgressEvent(stage="configuration",state="complete")); r.close(); print(s.getvalue()); assert "configuration: complete" in s.getvalue()'
+        run: |
+          ./skillevaluator-wheel-3.12/bin/python -c 'import io; from skillevaluator.tier3.harbor.progress import PlainProgressReporter,ProgressEvent,Tier3RunPlan; s=io.StringIO(); r=PlainProgressReporter(stream=s,refresh_interval=60); r.start(Tier3RunPlan(skill_name="wheel-smoke",environment="docker",agents=("opencode",))); r.emit(ProgressEvent(stage="configuration",state="complete")); r.close(); print(s.getvalue()); assert "configuration: complete" in s.getvalue()'
