@@ -1,0 +1,40 @@
+{
+  "total": 0,
+  "passed": 0,
+  "failed": 0,
+  "incomplete": 0,
+  "overall_passed": false,
+  "overall_status": "skipped",
+  "total_validators": 0,
+  "total_errors": 0,
+  "total_warnings": 0,
+  "severity_counts": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "skills": [],
+  "selection": {
+    "mode": "changed",
+    "base": "e03278c1b8a005bfe4d0e2085d75288ec1ddea5c",
+    "base_ref": "e03278c1b8a005bfe4d0e2085d75288ec1ddea5c",
+    "head": "e3128fccf94dd2beacfb4dd52c7788743fcce648",
+    "discovered": 2,
+    "selected": [],
+    "deleted": [],
+    "changed_files": 0
+  },
+  "execution": {
+    "run_url": "https://github.com/chrisknvidia/skillevaluator-ci-release-100/actions/runs/44153951029",
+    "commit": "e3128fccf94dd2beacfb4dd52c7788743fcce648",
+    "image": "ghcr.io/chrisknvidia/skillevaluator-candidate-100@sha256:6d0e40257bebba9f6908bad0164bc5497d6f17e95c2df649746f64d07c456deb",
+    "report_url": "https://chrisknvidia.github.io/skillevaluator-ci-release-100/runs/44153951029/1/",
+    "llm_enabled": false,
+    "workflow_sha": "6ccc7cc53161032285cda398681347c42820efc8"
+  },
+  "enforcement": {
+    "mode": "strict",
+    "downgraded": false
+  }
+}
