@@ -1,0 +1,62 @@
+name: Package 1.0.1 diagnostics
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          repository: NVIDIA/SkillEvaluator
+          ref: b6143cce411b839c54feaa3143b7af184843fbed
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: "3.13"
+      - uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3
+        with:
+          version: "0.13.8"
+      - name: Build exact official source
+        run: |
+          test "$(git rev-parse HEAD)" = b6143cce411b839c54feaa3143b7af184843fbed
+          uv build --python 3.13 --no-sources
+      - name: Install Python 3.12 tier3 wheel
+        run: |
+          uv venv --python 3.12 "$RUNNER_TEMP/skillevaluator-wheel-3.12"
+          wheel="$(find "$PWD/dist" -maxdepth 1 -type f -name 'skillevaluator-*.whl' -print -quit)"
+          uv pip install --python "$RUNNER_TEMP/skillevaluator-wheel-3.12/bin/python" "${wheel}[tier3]"
+      - name: Import actual installed modules
+        working-directory: ${{ runner.temp }}
+        run: |
+          ./skillevaluator-wheel-3.12/bin/python -c 'import anthropic, harbor, openai, skillevaluator, skillevaluator.model_catalog, skillevaluator.model_commands'
+          ./skillevaluator-wheel-3.12/bin/python -c 'from importlib.resources import files; assert files("skillevaluator.tier3.harbor").joinpath("templates/eval.py").is_file()'
+          ./skillevaluator-wheel-3.12/bin/python -c 'from importlib.resources import files; from skillevaluator.quality_config import load_quality_config; assert files("skillevaluator.config").joinpath("quality-default.yaml").is_file(); c=load_quality_config(); assert [h["heading"] for h in c["expected_headers"]]==["## Prerequisites","## Limitations","## Troubleshooting"], c'
+      - name: CLI version
+        working-directory: ${{ runner.temp }}
+        run: ./skillevaluator-wheel-3.12/bin/skillevaluator --version
+      - name: CLI help
+        working-directory: ${{ runner.temp }}
+        run: ./skillevaluator-wheel-3.12/bin/skillevaluator --help
+      - name: Models help
+        working-directory: ${{ runner.temp }}
+        run: ./skillevaluator-wheel-3.12/bin/skillevaluator models --help
+      - name: CI help
+        working-directory: ${{ runner.temp }}
+        run: ./skillevaluator-wheel-3.12/bin/skillevaluator ci --help
+      - name: Docker versions
+        run: |
+          docker version
+          docker compose version
+      - name: Tier3 doctor with placeholder credential
+        working-directory: ${{ runner.temp }}
+        env:
+          SKILL_EVAL_LLM_PROVIDER: nv_build
+          NVIDIA_API_KEY: nvapi-ci-placeholder
+        run: ./skillevaluator-wheel-3.12/bin/skillevaluator doctor --agents opencode --env-mode docker
+      - name: Plain progress output
+        if: always()
+        working-directory: ${{ runner.temp }}
+        run: ./skillevaluator-wheel-3.12/bin/python -c 'import io; from skillevaluator.tier3.harbor.progress import PlainProgressReporter,ProgressEvent,Tier3RunPlan; s=io.StringIO(); r=PlainProgressReporter(stream=s,refresh_interval=60); r.start(Tier3RunPlan(skill_name="wheel-smoke",environment="docker",agents=("opencode",))); r.emit(ProgressEvent(stage="configuration",state="complete")); r.close(); print(s.getvalue()); assert "configuration: complete" in s.getvalue()'
