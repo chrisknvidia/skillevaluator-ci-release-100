@@ -30,6 +30,6 @@ jobs:
       run-attempt: ${{ format('{0}', github.event.workflow_run.run_attempt || inputs.run-attempt) }}
       report-base-url: https://chrisknvidia.github.io/skillevaluator-ci-release-100/
       trusted-evaluator-shas: d8e4e82878a95c44a1881c9e200fb8e568c63923
-      trusted-caller-blobs: 0492df2b01efe07be5ccf672572e9ba282cb487a
+      trusted-caller-blobs: 0492df2b01efe07be5ccf672572e9ba282cb487a,b1c63d2b51e6072ae0b11e6253ea17cd6c84f2a5
       tools-ref: d8e4e82878a95c44a1881c9e200fb8e568c63923
       tools-repository: NVIDIA/SkillEvaluator
