@@ -1,0 +1,61 @@
+name: Frozen source qualification
+on:
+  workflow_dispatch:
+    inputs:
+      patch_b64:
+        description: Optional base64 review patch against the frozen source
+        required: false
+        default: ''
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          repository: NVIDIA/SkillEvaluator
+          ref: d8e4e82878a95c44a1881c9e200fb8e568c63923
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+      - uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3
+        with:
+          version: '0.13.8'
+      - name: Apply review candidate and record identity
+        env:
+          PATCH_B64: ${{ inputs.patch_b64 }}
+        run: |
+          if [ -n "$PATCH_B64" ]; then
+            printf '%s' "$PATCH_B64" | base64 --decode > "$RUNNER_TEMP/candidate.patch"
+            git apply --check "$RUNNER_TEMP/candidate.patch"
+            git apply "$RUNNER_TEMP/candidate.patch"
+            sha256sum "$RUNNER_TEMP/candidate.patch" > "$RUNNER_TEMP/patch-sha256.txt"
+          fi
+          git rev-parse HEAD > "$RUNNER_TEMP/frozen-sha.txt"
+          git diff --binary > "$RUNNER_TEMP/applied.patch"
+      - run: uv sync --all-extras --locked --python 3.12
+      - run: uv run ruff check .
+      - name: Full suite with bounded execution
+        run: |
+          set +e
+          timeout --signal=INT --kill-after=30s 30m uv run pytest -q -n auto --durations=15 > "$RUNNER_TEMP/source-tests.log" 2>&1
+          status=$?
+          tail -n 70 "$RUNNER_TEMP/source-tests.log"
+          exit "$status"
+      - name: Retain exact qualification evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: frozen-source-test-evidence
+          path: |
+            ${{ runner.temp }}/source-tests.log
+            ${{ runner.temp }}/frozen-sha.txt
+            ${{ runner.temp }}/applied.patch
+            ${{ runner.temp }}/patch-sha256.txt
+          retention-days: 14
