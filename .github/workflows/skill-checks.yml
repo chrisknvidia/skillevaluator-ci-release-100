@@ -8,7 +8,6 @@ name: Skill checks
   workflow_dispatch: null
 permissions:
   contents: read
-  id-token: write
 jobs:
   skills:
     uses: NVIDIA/SkillEvaluator/.github/workflows/evaluate-skills.yml@d8e4e82878a95c44a1881c9e200fb8e568c63923
