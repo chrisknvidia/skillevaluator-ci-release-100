@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           repository: NVIDIA/SkillEvaluator
-          ref: d8e4e82878a95c44a1881c9e200fb8e568c63923
+          ref: ab7f355afec89ef71f03cbc2afd6af7285cd1e3a
           persist-credentials: false
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
         with:
@@ -38,6 +38,7 @@ jobs:
             sha256sum "$RUNNER_TEMP/candidate.patch" > "$RUNNER_TEMP/patch-sha256.txt"
           fi
           git rev-parse HEAD > "$RUNNER_TEMP/frozen-sha.txt"
+          git add -N .
           git diff --binary > "$RUNNER_TEMP/applied.patch"
       - run: uv sync --all-extras --locked --python 3.12
       - run: uv run ruff check .
@@ -58,4 +59,5 @@ jobs:
             ${{ runner.temp }}/frozen-sha.txt
             ${{ runner.temp }}/applied.patch
             ${{ runner.temp }}/patch-sha256.txt
+            ${{ runner.temp }}/candidate.patch
           retention-days: 14
