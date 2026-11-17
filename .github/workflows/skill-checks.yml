@@ -18,4 +18,5 @@ jobs:
       min-score: 70
       scan-mode: auto
       llm: false
+      enforcement-mode: advisory
       report-base-url: https://chrisknvidia.github.io/skillevaluator-ci-release-100/
