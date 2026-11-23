@@ -53,3 +53,9 @@ It does not introduce external definitions or resolve domain disagreements by gu
 ## Troubleshooting
 If the source contains conflicting definitions, include each meaning with its own wording.
 If text is empty or invalid, identify the input problem and request a readable excerpt.
+
+<!-- Candidate changed-skill selection check. -->
+
+<!-- Update existing PR bot comment using comment-only workflow. -->
+
+<!-- Advance current head before backfilling the earlier completed scan. -->
